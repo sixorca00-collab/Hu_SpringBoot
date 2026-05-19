@@ -48,9 +48,9 @@ public class VenueController {
     }
 
     //Search by id
-    @Operation(summary = "Search coder by id")
-    @ApiResponse(responseCode = "200", description = "Return the coder with the id")
-    @ApiResponse(responseCode = "404", description = "Coder not found")
+    @Operation(summary = "Search venue by id")
+    @ApiResponse(responseCode = "200", description = "Return the venue with the id")
+    @ApiResponse(responseCode = "404", description = "venue not found")
     @GetMapping("/{id}")
     public ResponseEntity<Venue> getVenueById(@Parameter(description = "The id to search", required = true )
                                                   @PathVariable Long id) {
@@ -61,21 +61,21 @@ public class VenueController {
     }
 
     //Put
-    @Operation(summary = "Update a coder by id")
-    @ApiResponse(responseCode = "200", description = "The coder has update success")
-    @ApiResponse(responseCode = "404", description = "Coder not found")
-    @ApiResponse(responseCode = "401", description = "The coder not has updated")
+    @Operation(summary = "Update a venue by id")
+    @ApiResponse(responseCode = "200", description = "The venue has update success")
+    @ApiResponse(responseCode = "404", description = "venue not found")
+    @ApiResponse(responseCode = "401", description = "The venue not has updated")
     @ApiResponse(responseCode = "500", description = "Error in database")
     @PutMapping("/{id}")
-    public Venue updateVenue(@Parameter(description = "The id the coder to update", required = true)@PathVariable Long id, @RequestBody Venue newVenue){
+    public Venue updateVenue(@Parameter(description = "The id the venue to update", required = true)@PathVariable Long id, @RequestBody Venue newVenue){
         service.updateById(id, newVenue);
         return newVenue;
     }
 
     // Delete
-    @Operation(summary = "deleteCoder", description = "delete coder by Id")
+    @Operation(summary = "delete venue", description = "delete venue by Id")
     @DeleteMapping("/{id}")
-    public boolean deleteVenue(@Parameter(description = "Id  the coder to delete", required = true)@PathVariable Long id){
+    public boolean deleteVenue(@Parameter(description = "Id  the venue to delete", required = true)@PathVariable Long id){
         service.deleteById(id);
         return true;
     }
