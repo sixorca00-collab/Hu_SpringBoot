@@ -74,6 +74,8 @@ public class VenueController {
 
     // Delete
     @Operation(summary = "delete venue", description = "delete venue by Id")
+    @ApiResponse(responseCode = "200",description = "The venue has deleted success")
+    @ApiResponse(responseCode = "404", description = "venue not found")
     @DeleteMapping("/{id}")
     public boolean deleteVenue(@Parameter(description = "Id  the venue to delete", required = true)@PathVariable Long id){
         service.deleteById(id);
