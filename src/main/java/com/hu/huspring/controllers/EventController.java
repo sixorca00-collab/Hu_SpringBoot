@@ -6,11 +6,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static jdk.internal.jrtfs.JrtFileAttributeView.AttrID.size;
 
 @RestController
 @RequestMapping("/api/events")
@@ -41,10 +46,22 @@ public class EventController {
     @Operation(summary = "get all events", description = "The list the events whitou filter")
     @ApiResponse(responseCode = "200", description = "Return the list with all events")
     @ApiResponse(responseCode = "404", description = "events not found")
-    @GetMapping
-    public ResponseEntity<List<Event>> getAll() {
 
-        return ResponseEntity.ok(service.getAll());
+
+
+    @GetMapping
+    public Page<Event> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+
+        org.springframework.data.domain.Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? org.springframework.data.domain.Sort.by(sortBy).descending()
+                : org.springframework.data.domain.Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return service.getAllPaginated(pageable);
     }
 // search with id
     @Operation(summary = "Search event by id")

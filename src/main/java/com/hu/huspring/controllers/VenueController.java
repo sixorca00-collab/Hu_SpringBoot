@@ -4,9 +4,11 @@ import com.hu.huspring.models.Venue;
 import com.hu.huspring.services.VenueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +45,13 @@ public class VenueController {
     @ApiResponse(responseCode = "404", description = "Venues not found or registered")
 
     @GetMapping
-    public List<Venue> getAll(){
-        return service.getAll();
-    }
+    public Page<Venue> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
 
+        Pageable pageable = PageRequest.of(page, size);
+        return service.getAllPaginated(pageable);
+    }
     //Search by id
     @Operation(summary = "Search venue by id")
     @ApiResponse(responseCode = "200", description = "Return the venue with the id")
