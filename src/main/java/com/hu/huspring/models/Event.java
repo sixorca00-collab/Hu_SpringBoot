@@ -26,5 +26,9 @@ public class Event {
     private Date endDate;
     @Column(name = "description")
     String desc;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "venue_id", nullable = true) //Los relaciono en la db
+    private Venue venue;
 }
 
