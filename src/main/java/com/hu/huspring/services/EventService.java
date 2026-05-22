@@ -46,12 +46,12 @@ public class EventService {
     }
 
     public Event updateById(Long id, Event entity) {
-        // AQUÍ REEMPLAZAMOS EL 'Venue' POR 'Event' PARA QUE ENCAJE PERFECTO
         return eventRepository.findById(id).map(existingEvent -> {
             existingEvent.setType(entity.getType());
             existingEvent.setStartDate(entity.getStartDate());
             existingEvent.setEndDate(entity.getEndDate());
             existingEvent.setDesc(entity.getDesc());
+            existingEvent.setVenue(entity.getVenue()); // <-- Guardamos la relación nueva
             return eventRepository.save(existingEvent);
         }).orElse(null);
     }
