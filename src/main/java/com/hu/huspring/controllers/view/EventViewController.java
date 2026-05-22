@@ -40,7 +40,11 @@ public class EventViewController {
 
 @PostMapping("/save")
     public String saveEvent(@ModelAttribute("event") Event event){
+    if (event.getVenue() == null || event.getVenue().getId() == null) {
+        event.setVenue(null);
+    }
         Eservice.save(event);
+
         return "redirect:/admin/events";
 }
 
