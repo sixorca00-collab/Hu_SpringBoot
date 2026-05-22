@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel de Control - Eventify</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #007bff; color: white; }
-        .btn { background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; }
-        .alert { padding: 15px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 5px; }
-    </style>
-</head>
+<head th:replace="~{fragments :: head('Catálogo de Eventos')}"></head>
 <body>
 
-<h1>📋 Catálogo de Eventos</h1>
-<a th:href="@{/admin/events/new}" class="btn">➕ Registrar Nuevo Evento</a>
-<br><br>
+<header th:replace="~{fragments :: header}"></header>
 
-<div th:if="${#lists.isEmpty(events)}" class="alert">
-    <strong>Aviso:</strong> Actualmente no hay eventos programados.
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h1 style="font-size: 26px; font-weight: 700; margin: 0; letter-spacing: -0.5px;">📅 Gestión de Eventos</h1>
+        <a th:href="@{/admin/events/new}" class="btn">➕ Registrar Evento</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(events)}" class="alert">
+        <strong>Aviso:</strong> Actualmente no hay eventos programados en el sistema.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(events)}">
+        <thead>
+        <tr>
+            <th style="width: 80px;">ID</th>
+            <th>Tipo de Evento</th>
+            <th>Descripción</th>
+            <th>Fecha Inicio</th>
+            <th>Sede / Lugar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <td th:text="${event.id}"></td>
+            <td>
+                        <span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #495057;"
+                              th:text="${event.type}">
+                        </span>
+            </td>
+            <td th:text="${event.desc}"></td>
+            <td th:text="${#dates.format(event.startDate, 'dd-MM-yyyy HH:mm')}"></td>
+            <td>
+                        <span th:text="${event.venue != null ? event.venue.address : 'Sin sede asignada'}"
+                              th:style="${event.venue == null ? 'color: var(--text-muted); font-style: italic;' : 'font-weight: 500;'}">
+                        </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
-<table th:unless="${#lists.isEmpty(events)}">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Tipo</th>
-        <th>Descripción</th>
-        <th>Fecha Inicio</th>
-        <th>Sede / Lugar</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="event : ${events}">
-        <td th:text="${event.id}">1</td>
-        <td th:text="${event.type}">CONCERT</td>
-        <td th:text="${event.desc}">Descripción de prueba</td>
-        <td th:text="${#dates.format(event.startDate, 'dd-MM-yyyy HH:mm')}">01-01-2026</td>
-        <td th:text="${event.venue != null ? event.venue.address : 'Sin sede asignada'}">Dirección</td>
-    </tr>
-    </tbody>
-</table>
-
+<footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>

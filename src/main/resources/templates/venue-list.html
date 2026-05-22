@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Catálogo de Sedes')}"></head>
+<body>
+
+<header th:replace="~{fragments :: header}"></header>
+
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h1 style="font-size: 26px; font-weight: 700; margin: 0; letter-spacing: -0.5px;">🏢 Catálogo de Sedes</h1>
+        <a th:href="@{/admin/venues/new}" class="btn">➕ Registrar Nueva Sede</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(venues)}" class="alert">
+        <strong>Aviso:</strong> Actualmente no hay sedes registradas en el sistema.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(venues)}">
+        <thead>
+        <tr>
+            <th style="width: 80px;">ID</th>
+            <th>Dirección Física</th>
+            <th>Piso / Pabellón</th>
+            <th>Capacidad Máxima</th>
+            <th>Precio Base Alquiler</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="v : ${venues}">
+            <td th:text="${v.id}">1</td>
+            <td style="font-weight: 500;" th:text="${v.address}">Calle Falsa 123</td>
+            <td th:text="${v.floor}">2</td>
+            <td th:text="${v.capacity + ' personas'}">150</td>
+            <td style="color: #2b2d42; font-weight: 600;" th:text="${'$ ' + v.price}">$2000.0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
