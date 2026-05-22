@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Evento - Eventify</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        .btn-submit { background: #007bff; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>📝 Registrar Nuevo Evento</h1>
+
+<form th:action="@{/admin/events/save}" th:object="${event}" method="POST">
+
+    <div class="form-group">
+        <label>Tipo de Evento:</label>
+        <select th:field="*{type}">
+            <option th:each="typeOpt : ${T(com.hu.huspring.EventType).values()}"
+                    th:value="${typeOpt}" th:text="${typeOpt}"></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Descripción:</label>
+        <input type="text" th:field="*{desc}" placeholder="Ej. Riwi Talk de Innovación" required />
+    </div>
+
+    <div class="form-group">
+        <label>Fecha de Inicio:</label>
+        <input type="datetime-local" th:field="*{startDate}" required />
+    </div>
+
+    <div class="form-group">
+        <label>Fecha de Fin:</label>
+        <input type="datetime-local" th:field="*{endDate}" required />
+    </div>
+
+    <div class="form-group">
+        <label>Sede / Ubicación:</label>
+        <select th:field="*{venue.id}">
+            <option value="">-- Selecciona una Sede --</option>
+            <option th:each="v : ${venues}" th:value="${v.id}" th:text="${v.address}"></option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn-submit">💾 Guardar Evento</button>
+</form>
+
+<br>
+<a th:href="@{/admin/events}">⬅️ Volver al listado</a>
+
+</body>
+</html>

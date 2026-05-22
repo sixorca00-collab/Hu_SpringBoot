@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Control - Eventify</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        .btn { background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; }
+        .alert { padding: 15px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>📋 Catálogo de Eventos</h1>
+<a th:href="@{/admin/events/new}" class="btn">➕ Registrar Nuevo Evento</a>
+<br><br>
+
+<div th:if="${#lists.isEmpty(events)}" class="alert">
+    <strong>Aviso:</strong> Actualmente no hay eventos programados.
+</div>
+
+<table th:unless="${#lists.isEmpty(events)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+        <th>Fecha Inicio</th>
+        <th>Sede / Lugar</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="event : ${events}">
+        <td th:text="${event.id}">1</td>
+        <td th:text="${event.type}">CONCERT</td>
+        <td th:text="${event.desc}">Descripción de prueba</td>
+        <td th:text="${#dates.format(event.startDate, 'dd-MM-yyyy HH:mm')}">01-01-2026</td>
+        <td th:text="${event.venue != null ? event.venue.address : 'Sin sede asignada'}">Dirección</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
