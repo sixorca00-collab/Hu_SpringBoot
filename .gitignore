@@ -33,5 +33,6 @@ build/
 .vscode/
 
 ##DB- trash##
-.datos_proyecto.mv.db
-.datos_proyecto.trace.db
+datos_proyecto.mv.db
+datos_proyecto.trace.db
+*.db
