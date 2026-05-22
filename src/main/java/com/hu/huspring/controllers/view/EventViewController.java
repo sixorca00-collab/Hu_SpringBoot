@@ -28,7 +28,7 @@ public class EventViewController {
     @GetMapping("/new")
     public String showCreationForm(Model model){
         model.addAttribute("event", new Event());
-        model.addAttribute("venue", new Venue());
+        model.addAttribute("venues", Vservice.getAllPaginated(Pageable.unpaged()).getContent());
         return "event-form";
     }
 
