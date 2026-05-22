@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+##DB- trash##
+.datos_proyecto.mv.db
+datos_proyecto.trace.db
