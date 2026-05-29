@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -14,6 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "Events")
 @Entity
+
+@SQLRestriction("isActive = true")
 public class Event {
 
     @Id
@@ -35,8 +38,13 @@ public class Event {
     @Column(name = "description")
     private String desc;
 
+    @Column(name = "isActive")
+    private boolean isActive = true;
+
     // Aquí vive la relación que recuperamos de Git
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "venue_id", nullable = true)
     private Venue venue;
+
+    public void softDelete(){this.isActive = false;}
 }
