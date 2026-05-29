@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "Events")
 @Entity
 
-@SQLRestriction("isActive = true")
+@SQLRestriction("is_Active = true")
 public class Event {
 
     @Id
@@ -38,7 +38,7 @@ public class Event {
     @Column(name = "description")
     private String desc;
 
-    @Column(name = "isActive")
+    @Column(name = "is_Active")
     private boolean isActive = true;
 
     // Aquí vive la relación que recuperamos de Git

@@ -1,10 +1,12 @@
 package com.hu.huspring.services;
 
+import com.hu.huspring.dtos.EventDTO;
 import com.hu.huspring.models.Event;
 import com.hu.huspring.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +31,12 @@ public class EventService {
         return eventRepository.findAll();
     }*/
 
-    public Page<Event> getAllPaginated(Pageable pageable) {
-        return eventRepository.findAll(pageable); // JPA hace la magia de cortar el pastel en porciones por detrás
+    public Slice<EventDTO> getAllPaginated(Pageable pageable) {
+        return eventRepository.findByFilters(pageable); // JPA hace la magia de cortar el pastel en porciones por detrás
+    }
+
+    public long count() {
+        return eventRepository.count();
     }
 
     public Optional<Event> getById(Long id) {
@@ -38,11 +44,11 @@ public class EventService {
     }
 
     public boolean deleteById(Long id) {
-        if (eventRepository.existsById(id)) {
-            eventRepository.deleteById(id);
+        return eventRepository.findById(id).map(event -> {
+            event.softDelete();
+            eventRepository.save(event);
             return true;
-        }
-        return false;
+        }).orElse(false);
     }
 
     public Event updateById(Long id, Event entity) {

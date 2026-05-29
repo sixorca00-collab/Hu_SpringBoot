@@ -14,6 +14,6 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByDescContaining(String text);
-    @Query("SELECT new com.hu.huspring.dto.EventDTO(e.id, e.n, e.startDate, v.name, v.city) FROM Event e JOIN e.venue v")
+    @Query("SELECT new com.hu.huspring.dtos.EventDTO(e.id, e.type, e.startDate, e.endDate, e.desc, v.id, v.address, v.city) FROM Event e LEFT JOIN e.venue v")
     Slice<EventDTO> findByFilters(Pageable pageable);
 }
