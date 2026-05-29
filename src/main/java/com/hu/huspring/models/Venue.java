@@ -20,4 +20,6 @@ public class Venue {
     private int floor;
     private double price;
     private int capacity;
+    @Column(nullable = false)
+    private String city;
 }
