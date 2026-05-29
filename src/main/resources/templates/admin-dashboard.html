@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Panel Admin')}"></head>
+<body class="admin-shell">
+
+<header th:replace="~{fragments :: header('dashboard')}"></header>
+
+<main class="page-wrap">
+    <section class="page-hero">
+        <div>
+            <p class="eyebrow">Panel principal</p>
+            <h1>Control total de eventos y sedes</h1>
+            <p>Desde aquí puedes crear, editar, revisar y eliminar registros de todo el sistema.</p>
+        </div>
+        <div class="hero-actions">
+            <a th:href="@{/admin/events/new}" class="btn">+ Nuevo evento</a>
+            <a th:href="@{/admin/venues/new}" class="btn btn-secondary">+ Nueva sede</a>
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span>Eventos registrados</span>
+            <strong th:text="${eventCount}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Sedes registradas</span>
+            <strong th:text="${venueCount}">0</strong>
+        </article>
+        <article class="stat-card">
+            <span>Acceso rápido</span>
+            <strong>CRUD</strong>
+        </article>
+        <article class="stat-card">
+            <span>Estado</span>
+            <strong>Online</strong>
+        </article>
+    </section>
+
+    <section class="dashboard-grid">
+        <div class="panel">
+            <div class="toolbar" style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 class="section-title" style="margin: 0;">Eventos recientes</h2>
+                <a th:href="@{/admin/events}" class="btn btn-secondary">Ver todos</a>
+            </div>
+
+            <div th:if="${#lists.isEmpty(recentEvents)}" class="empty-state">
+                No hay eventos recientes.
+            </div>
+
+            <div th:unless="${#lists.isEmpty(recentEvents)}" style="overflow-x: auto;">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Inicio</th>
+                        <th>Sede</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="event : ${recentEvents}">
+                        <td><span class="badge" th:text="${event.type}"></span></td>
+                        <td th:text="${event.desc}"></td>
+                        <td th:text="${event.startDate != null ? #dates.format(event.startDate, 'dd/MM/yyyy HH:mm') : 'N/A'}"></td>
+                        <td th:text="${event.venueAddress != null ? event.venueAddress : 'Sin sede'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="toolbar" style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 class="section-title" style="margin: 0;">Sedes recientes</h2>
+                <a th:href="@{/admin/venues}" class="btn btn-secondary">Ver todas</a>
+            </div>
+
+            <div th:if="${#lists.isEmpty(recentVenues)}" class="empty-state">
+                No hay sedes recientes.
+            </div>
+
+            <div th:unless="${#lists.isEmpty(recentVenues)}" style="overflow-x: auto;">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Dirección</th>
+                        <th>Ciudad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="venue : ${recentVenues}">
+                        <td th:text="${venue.address}"></td>
+                        <td th:text="${venue.city}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+</body>
+</html>
