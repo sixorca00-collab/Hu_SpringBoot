@@ -28,6 +28,10 @@
             <strong th:text="${venueCount}">0</strong>
         </article>
         <article class="stat-card">
+            <span>Categorías registradas</span>
+            <strong th:text="${categoryCount}">0</strong>
+        </article>
+        <article class="stat-card">
             <span>Acceso rápido</span>
             <strong>CRUD</strong>
         </article>
@@ -55,6 +59,7 @@
                         <th>Tipo</th>
                         <th>Descripción</th>
                         <th>Inicio</th>
+                        <th>Categoría</th>
                         <th>Sede</th>
                     </tr>
                     </thead>
@@ -63,6 +68,7 @@
                         <td><span class="badge" th:text="${event.type}"></span></td>
                         <td th:text="${event.desc}"></td>
                         <td th:text="${event.startDate != null ? #dates.format(event.startDate, 'dd/MM/yyyy HH:mm') : 'N/A'}"></td>
+                        <td th:text="${event.categoryName != null ? event.categoryName : 'Sin categoría'}"></td>
                         <td th:text="${event.venueAddress != null ? event.venueAddress : 'Sin sede'}"></td>
                     </tr>
                     </tbody>

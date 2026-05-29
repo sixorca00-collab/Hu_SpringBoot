@@ -27,6 +27,10 @@ public class VenueService {
         return venueRepository.findAll(pageable);
     }
 
+    public long count() {
+        return venueRepository.count();
+    }
+
     public Optional<Venue> getById(Long id) {
         return venueRepository.findById(id);
     }

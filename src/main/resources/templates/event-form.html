@@ -70,6 +70,17 @@
                     </select>
                     <div class="field-help">Si no se asigna una sede, el evento se guarda sin venue asociado.</div>
                 </div>
+
+                <div class="form-group full">
+                    <label>Categoría</label>
+                    <select th:field="*{category.id}">
+                        <option value="">-- Seleccionar categoría (opcional) --</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}"></option>
+                    </select>
+                    <div class="field-help">La categoría permite filtrar y documentar el catálogo de eventos.</div>
+                </div>
             </div>
 
             <div class="form-actions">

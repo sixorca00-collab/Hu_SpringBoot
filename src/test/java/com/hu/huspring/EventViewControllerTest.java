@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
@@ -30,10 +31,13 @@ public class EventViewControllerTest {
     @MockBean
     private com.hu.huspring.services.VenueService venueService; // También simulamos el de sedes
 
+    @MockBean
+    private com.hu.huspring.services.CategoryService categoryService;
+
     @Test
     public void testListEventsViewShouldReturnSuccessAndModel() throws Exception {
         Slice<EventDTO> events = new SliceImpl<>(List.of());
-        when(eventService.getAllPaginated(org.springframework.data.domain.Pageable.unpaged())).thenReturn(events);
+        when(eventService.getAllPaginated(PageRequest.of(0, 10))).thenReturn(events);
 
         mockMvc.perform(get("/admin/events")
                         .contentType(MediaType.TEXT_HTML))
