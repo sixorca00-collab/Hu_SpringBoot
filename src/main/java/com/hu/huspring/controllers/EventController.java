@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -27,7 +26,7 @@ public class EventController {
 
     //Post
     @Tag(name = "Event-Controller", description = "Crud to events")
-    @Operation(summary = "save event ", description = "endPoint save events in the database")
+    @Operation(summary = "save event ", description = "Creates an event with optional venue and category relations")
     @ApiResponse(responseCode = "201", description = "Event created success")
     @ApiResponse(responseCode = "401", description = "event has not created")
     @ApiResponse(responseCode = "500", description = "error in the database")
@@ -41,25 +40,22 @@ public class EventController {
                 .body(savedEvent);
     }
 
-    @Operation(summary = "get all events", description = "The list the events whitou filter")
-    @ApiResponse(responseCode = "200", description = "Return the list with all events")
+    @Operation(summary = "get all events", description = "Returns the event catalog ordered by start date descending and filtered by category/city")
+    @ApiResponse(responseCode = "200", description = "Return the filtered catalog")
     @ApiResponse(responseCode = "404", description = "events not found")
-
-
-
     @GetMapping
     public Slice<EventDTO> getAll(
+            @Parameter(description = "Zero-based page index", example = "0")
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
+            @Parameter(description = "Page size", example = "10")
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Partial category name to search", example = "rock")
+            @RequestParam(required = false) String category,
+            @Parameter(description = "Partial city name to search", example = "bog")
+            @RequestParam(required = false) String city) {
 
-        org.springframework.data.domain.Sort sort = sortDir.equalsIgnoreCase("desc")
-                ? org.springframework.data.domain.Sort.by(sortBy).descending()
-                : org.springframework.data.domain.Sort.by(sortBy).ascending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return service.getAllPaginated(pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        return service.getAllPaginated(pageable, category, city);
     }
 // search with id
     @Operation(summary = "Search event by id")
@@ -74,7 +70,7 @@ public class EventController {
     }
 
 
-    @Operation(summary = "delete event", description = "delete event by Id")
+    @Operation(summary = "delete event", description = "Soft deletes an event by marking it inactive")
     @ApiResponse(responseCode = "200",description = "The event has deleted success")
     @ApiResponse(responseCode = "404", description = "event not found")
     @DeleteMapping("/{id}")

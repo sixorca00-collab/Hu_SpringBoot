@@ -32,7 +32,13 @@ public class EventService {
     }*/
 
     public Slice<EventDTO> getAllPaginated(Pageable pageable) {
-        return eventRepository.findByFilters(pageable); // JPA hace la magia de cortar el pastel en porciones por detrás
+        return getAllPaginated(pageable, null, null);
+    }
+
+    public Slice<EventDTO> getAllPaginated(Pageable pageable, String category, String city) {
+        String categoryFilter = normalizeFilter(category);
+        String cityFilter = normalizeFilter(city);
+        return eventRepository.findByFilters(categoryFilter, cityFilter, pageable); // JPA hace la magia de cortar el pastel en porciones por detrás
     }
 
     public long count() {
@@ -60,5 +66,14 @@ public class EventService {
             existingEvent.setVenue(entity.getVenue()); // <-- Guardamos la relación nueva
             return eventRepository.save(existingEvent);
         }).orElse(null);
+    }
+
+    private String normalizeFilter(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmedValue = value.trim();
+        return trimmedValue.isEmpty() ? null : trimmedValue;
     }
 }
