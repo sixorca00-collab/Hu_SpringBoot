@@ -1,5 +1,6 @@
 package com.hu.huspring.controllers;
 
+import com.hu.huspring.dtos.EventDTO;
 import com.hu.huspring.models.Event;
 import com.hu.huspring.services.EventService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +48,7 @@ public class EventController {
 
 
     @GetMapping
-    public Page<Event> getAll(
+    public Slice<EventDTO> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id") String sortBy,
