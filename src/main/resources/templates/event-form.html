@@ -1,55 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: head('Registrar Evento')}"></head>
-<body>
+<head th:replace="~{fragments :: head('Eventos')}"></head>
+<body class="admin-shell">
 
-<header th:replace="~{fragments :: header}"></header>
+<header th:replace="~{fragments :: header('events')}"></header>
 
-<div class="container">
-    <div class="form-card">
-        <h1 style="font-size: 22px; font-weight: 700; margin-top: 0; margin-bottom: 25px;">📝 Registrar Nuevo Evento</h1>
+<main class="page-wrap">
+    <section class="page-hero">
+        <div>
+            <p class="eyebrow">Eventos</p>
+            <h1 th:text="${event.id == null ? 'Crear evento' : 'Editar evento'}">Crear evento</h1>
+            <p>Configura fechas, tipo, descripción y sede asociada desde el panel de administración.</p>
+        </div>
+        <div class="hero-actions">
+            <a th:href="@{/admin/events}" class="btn btn-secondary">Volver al listado</a>
+        </div>
+    </section>
 
-        <form th:action="@{/admin/events/save}" th:object="${event}" method="POST">
+    <section class="form-card">
+        <div class="toolbar" style="justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <h2 class="section-title" style="margin: 0;">Detalles del evento</h2>
+            <span class="badge" th:text="${event.id == null ? 'Nuevo' : 'ID #' + event.id}">Nuevo</span>
+        </div>
 
-            <div class="form-group">
-                <label>Tipo de Evento</label>
-                <select th:field="*{type}">
-                    <option th:each="typeOpt : ${T(com.hu.huspring.EventType).values()}"
-                            th:value="${typeOpt}" th:text="${typeOpt}"></option>
-                </select>
+        <form th:action="${event.id == null} ? @{/admin/events/save} : @{/admin/events/update/{id}(id=${event.id})}"
+              th:object="${event}"
+              method="post">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tipo de evento</label>
+                    <select th:field="*{type}" required>
+                        <option value="">-- Seleccionar tipo --</option>
+                        <option th:each="typeOpt : ${T(com.hu.huspring.EventType).values()}"
+                                th:value="${typeOpt}"
+                                th:text="${typeOpt}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text"
+                           th:field="*{desc}"
+                           placeholder="Ej. Riwi Talk de Innovación"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de inicio</label>
+                    <input type="datetime-local"
+                           th:field="*{startDate}"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de fin</label>
+                    <input type="datetime-local"
+                           th:field="*{endDate}"
+                           required />
+                </div>
+
+                <div class="form-group full">
+                    <label>Sede / ubicación</label>
+                    <select th:field="*{venue.id}">
+                        <option value="">-- Seleccionar sede (opcional) --</option>
+                        <option th:each="v : ${venues}"
+                                th:value="${v.id}"
+                                th:text="${v.address + ' · ' + v.city}"></option>
+                    </select>
+                    <div class="field-help">Si no se asigna una sede, el evento se guarda sin venue asociado.</div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Descripción</label>
-                <input type="text" th:field="*{desc}" placeholder="Ej. Riwi Talk de Innovación" required />
-            </div>
-
-            <div class="form-group">
-                <label>Fecha de Inicio</label>
-                <input type="datetime-local" th:field="*{startDate}" required />
-            </div>
-
-            <div class="form-group">
-                <label>Fecha de Fin</label>
-                <input type="datetime-local" th:field="*{endDate}" required />
-            </div>
-
-            <div class="form-group">
-                <label>Sede / Ubicación</label>
-                <select name="venue" id="venue">
-                    <option value="">-- Seleccionar ubicación (Opcional) --</option>
-                    <option th:each="v : ${venues}" th:value="${v.id}" th:text="${v.address}"></option>
-                </select>
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 30px;">
-                <button type="submit" class="btn" style="flex: 1;">💾 Guardar Evento</button>
+            <div class="form-actions">
+                <button type="submit" class="btn">Guardar evento</button>
                 <a th:href="@{/admin/events}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
-    </div>
-</div>
+    </section>
+</main>
 
 <footer th:replace="~{fragments :: footer}"></footer>
+
 </body>
 </html>
