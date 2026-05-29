@@ -46,5 +46,9 @@ public class Event {
     @JoinColumn(name = "venue_id", nullable = true)
     private Venue venue;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = true)
+    private Category category;
+
     public void softDelete(){this.isActive = false;}
 }
